@@ -17,4 +17,9 @@
     <PackageReference Include="Microsoft.SqlServer.Server" Version="1.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tarea3.DA\Tarea3.DA.csproj" />
+    <ProjectReference Include="..\Tarea3.MODELS\Tarea3.MODELS.csproj" />
+  </ItemGroup>
+
 </Project>
