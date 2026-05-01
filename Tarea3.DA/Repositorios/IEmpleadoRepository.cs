@@ -8,7 +8,7 @@ namespace Tarea3.DA.Repositorios
     public interface IEmpleadoRepository
     {
         IEnumerable<Empleado> ObtenerTodos();
-        Empleado? ObtenerPorId();
+        Empleado? ObtenerPorId(int id);
         IEnumerable<Empleado> BuscarPorNombreODepartamento(string termino);
         IEnumerable<Empleado> ObtenerPaginado(int pagina, int tamano, string? busqueda);
         int ContarTotalEmpleados(string? busqueda);
