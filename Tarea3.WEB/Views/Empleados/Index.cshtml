@@ -1,0 +1,120 @@
+﻿@model IEnumerable<Tarea3.MODELS.Empleado>
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Gestión de Empleados";
+    int paginaActual = ViewBag.PaginaActual ?? 1;
+    int totalPaginas = ViewBag.TotalPaginas ?? 1;
+    int totalRegistros = ViewBag.TotalRegistros ?? 0;
+    string busqueda = ViewBag.Busqueda ?? "";
+    var cultura = new CultureInfo("es-CR");
+}
+
+<h1>Gestión de Empleados</h1>
+
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-md-6">
+        <input type="text" name="busqueda" value="@busqueda" class="form-control"
+               placeholder="Buscar por nombre, apellidos o departamento" />
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </div>
+    <div class="col-md-4 text-end">
+        <a asp-action="Create" class="btn btn-success">Agregar Empleado</a>
+    </div>
+</form>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-warning">
+        No hay empleados registrados.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Nombre Completo</th>
+                <th>Departamento</th>
+                <th>Salario</th>
+                <th>Fecha Ingreso</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var empleado in Model)
+            {
+                <tr>
+                    <td>@empleado.NombreCompleto</td>
+                    <td>@empleado.Departamento</td>
+                    <td>@empleado.Salario.ToString("C", cultura)</td>
+                    <td>@empleado.FechaIngreso.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @if (empleado.Activo)
+                        {
+                            <span class="badge bg-success">Activo</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Dado de Baja</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@empleado.Id" class="btn btn-warning btn-sm">Editar</a>
+
+                        <form asp-action="ToggleActivo" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@empleado.Id" />
+                            <input type="hidden" name="busqueda" value="@busqueda" />
+                            <input type="hidden" name="pagina" value="@paginaActual" />
+
+                            @if (empleado.Activo)
+                            {
+                                <button type="submit" class="btn btn-danger btn-sm">Dar de Baja</button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success btn-sm">Activar</button>
+                            }
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <div>
+        Total: <strong>@totalRegistros</strong> empleados
+    </div>
+
+    <div>
+        Página <strong>@paginaActual</strong> de <strong>@totalPaginas</strong>
+    </div>
+
+    <div>
+        @if (paginaActual > 1)
+        {
+            <a asp-action="Index" asp-route-busqueda="@busqueda" asp-route-pagina="@(paginaActual - 1)"
+               class="btn btn-outline-primary">Anterior</a>
+        }
+        else
+        {
+            <button class="btn btn-outline-secondary" disabled>Anterior</button>
+        }
+
+        @if (paginaActual < totalPaginas)
+        {
+            <a asp-action="Index" asp-route-busqueda="@busqueda" asp-route-pagina="@(paginaActual + 1)"
+               class="btn btn-outline-primary">Siguiente</a>
+        }
+        else
+        {
+            <button class="btn btn-outline-secondary" disabled>Siguiente</button>
+        }
+    </div>
+</div>
