@@ -34,6 +34,12 @@ namespace Tarea3.WEB.Controllers
             return View(empleado);
         }
 
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Empleado empleado)

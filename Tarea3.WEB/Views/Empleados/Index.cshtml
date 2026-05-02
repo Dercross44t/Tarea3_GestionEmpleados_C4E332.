@@ -47,11 +47,13 @@ else
         <tbody>
             @foreach (var empleado in Model)
             {
+                string claseRoja = empleado.Activo ? "" : "text-danger";
+
                 <tr>
-                    <td>@empleado.NombreCompleto</td>
-                    <td>@empleado.Departamento</td>
-                    <td>@empleado.Salario.ToString("C", cultura)</td>
-                    <td>@empleado.FechaIngreso.ToString("dd/MM/yyyy")</td>
+                    <td class="@claseRoja">@empleado.NombreCompleto</td>
+                    <td class="@claseRoja">@empleado.Departamento</td>
+                    <td class="@claseRoja">@empleado.Salario.ToString("C", cultura)</td>
+                    <td class="@claseRoja">@empleado.FechaIngreso.ToString("dd/MM/yyyy")</td>
                     <td>
                         @if (empleado.Activo)
                         {
